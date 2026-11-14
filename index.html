@@ -27,7 +27,10 @@
   .card b { display:block; color:var(--navy); }
   .card span { font-size:14px; color:var(--muted); }
   ol.flow { background:#fff; border:1px solid var(--line); border-radius:10px; padding:14px 20px 14px 40px; margin:0 0 12px; }
-  img.graph { width:100%; background:#fff; border:1px solid var(--line); border-radius:10px; }
+  .graph-wrap { width:min(1400px, calc(100vw - 32px)); margin-left:50%; transform:translateX(-50%); }
+  .graph-wrap a { display:block; }
+  img.graph { width:100%; display:block; background:#fff; border:1px solid var(--line); border-radius:10px; cursor:zoom-in; }
+  .graph-wrap p { margin:6px 0 0; text-align:right; font-size:13px; color:var(--muted); }
   .muted { color:var(--muted); font-size:14px; }
   @media (max-width:700px) { .deck, .cards { grid-template-columns:1fr; } }
 </style>
@@ -47,7 +50,7 @@
     </div>
   </a>
 
-  <h2>Wiki（49 頁，直接在這個網站上看）</h2>
+  <h2>Wiki</h2>
   <div class="cards">
     <a class="card" href="wiki.html?f=wiki/index.md"><b>Wiki 目錄</b><span>概念 19、爭議 3、常見誤解 9、來源 18</span></a>
     <a class="card" href="wiki.html?f=wiki/concepts/overview.md"><b>範例：總覽</b><span>垃圾大致分成四類</span></a>
@@ -71,7 +74,10 @@
     <li>逐頁稿 → 逐頁稿關卡（程式）→ 忠實度審查（獨立 AI）</li>
     <li>渲染 HTML（程式）→ 渲染關卡（程式）→ 交件</li>
   </ol>
-  <img class="graph" src="slides/garbage-intro/graph.png" alt="做簡報的 Graph 流程圖">
+  <div class="graph-wrap">
+    <a href="slides/garbage-intro/graph.png" target="_blank" rel="noopener"><img class="graph" src="slides/garbage-intro/graph.png" alt="做簡報的 Graph 流程圖"></a>
+    <p>點圖片可以看原始大小</p>
+  </div>
   <div class="cards" style="margin-top:12px">
     <a class="card" href="wiki.html?f=.agents/workflows/topic-slides.md"><b>流程定義</b><span>每一關做什麼、v1 → v2 修改紀錄</span></a>
     <a class="card" href="wiki.html?f=slides/garbage-intro/run-log.md"><b>執行紀錄</b><span>每一關的時間、結果、問題清單</span></a>
