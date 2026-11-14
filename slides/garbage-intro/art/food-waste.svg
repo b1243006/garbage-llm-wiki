@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="把廚餘放在濾網上瀝乾">
+  <!-- 濾網 -->
+  <path d="M50 120 L270 120 Q262 222 160 232 Q58 222 50 120 Z" fill="#e6e9ec" stroke="#17324d" stroke-width="4" stroke-linejoin="round"/>
+  <g fill="#17324d" opacity=".35">
+    <circle cx="100" cy="170" r="4"/><circle cx="130" cy="186" r="4"/><circle cx="160" cy="194" r="4"/><circle cx="190" cy="186" r="4"/><circle cx="220" cy="170" r="4"/>
+    <circle cx="115" cy="204" r="4"/><circle cx="145" cy="214" r="4"/><circle cx="175" cy="214" r="4"/><circle cx="205" cy="204" r="4"/>
+  </g>
+  <rect x="28" y="112" width="264" height="14" rx="7" fill="#c9d6e2" stroke="#17324d" stroke-width="4"/>
+  <!-- 菜葉 -->
+  <path d="M84 112 Q96 66 140 70 Q128 104 84 112 Z" fill="#7cbf7a" stroke="#17324d" stroke-width="3"/>
+  <path d="M90 108 Q112 88 134 76" stroke="#17324d" stroke-width="2" fill="none"/>
+  <!-- 果皮 -->
+  <path d="M168 112 Q176 70 212 64 Q206 82 222 92 Q200 96 196 112 Z" fill="#f2c230" stroke="#17324d" stroke-width="3" stroke-linejoin="round"/>
+  <!-- 飯粒 -->
+  <g fill="#ffffff" stroke="#17324d" stroke-width="2">
+    <ellipse cx="236" cy="104" rx="8" ry="5"/><ellipse cx="252" cy="98" rx="8" ry="5"/><ellipse cx="246" cy="88" rx="8" ry="5"/><ellipse cx="148" cy="104" rx="8" ry="5"/>
+  </g>
+  <!-- 滴下來的水 -->
+  <g fill="#7fb6dd" stroke="#17324d" stroke-width="2">
+    <path d="M130 248 Q138 262 130 268 Q122 262 130 248 Z"/>
+    <path d="M160 262 Q168 276 160 282 Q152 276 160 262 Z"/>
+    <path d="M190 248 Q198 262 190 268 Q182 262 190 248 Z"/>
+    <path d="M160 294 Q166 304 160 309 Q154 304 160 294 Z"/>
+  </g>
+</svg>

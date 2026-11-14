@@ -54,6 +54,10 @@ def li(items, ordered=False):
     return f"<{tag}>{''.join(out)}</{tag}>"
 
 
+# 插圖：自己用 SVG 畫的示意圖（art/ 資料夾），不含文字，只放在留白比較多的頁面。
+# 插圖不帶任何資訊，所以不經過證據卡和忠實度審查；改這裡只影響版面，要重跑渲染關卡。
+ART = {1: "bubble-tea", 5: "bubble-tea", 6: "lunchbox", 9: "food-waste", 11: "mattress"}
+
 slides = []
 files = sorted((d / "drafts").glob("[0-9][0-9].md"))
 for f in files:
@@ -64,7 +68,8 @@ for f in files:
     lead_plain, lead_tags, _ = cite_html(lead) if lead else ("", "", [])
     lead_html = f'<p class="lead"><span>{lead_plain}</span>{lead_tags}</p>' if lead else ""
     if layout == "cover":
-        inner = f'<div class="cover"><div class="stripe"></div><h1>{esc(title)}</h1>{lead_html}<p class="hint">用下方的「下一頁」、鍵盤 → 鍵，或點畫面右側開始；手機可以左右滑</p></div>'
+        art = f'<img class="cover-art" src="art/{ART[page]}.svg" alt="">' if page in ART else ""
+        inner = f'<div class="cover"><div class="stripe"></div><h1>{esc(title)}</h1>{lead_html}<p class="hint">用下方的「下一頁」、鍵盤 → 鍵，或點畫面右側開始；手機可以左右滑</p></div>{art}'
     else:
         if layout == "table":
             rows = []
@@ -83,7 +88,7 @@ for f in files:
             content = "".join((f"<h3>{esc(h)}</h3>" if h else "") + li(items, layout == "steps") for h, items in sections)
         src = "、".join(f'<a href="{WIKI_VIEW}{x}.md">{x} {esc(titles.get(x, ""))}</a>' for x in docs)
         inner = f'''<header><div class="goal">這頁要學會：{esc(goals.get(page, ""))}</div><h2>{esc(title)}</h2></header>
-<div class="body {layout}">{lead_html}{content}</div>
+<div class="body {layout}">{f'<div class="with-art"><div class="txt">{lead_html}{content}</div><img class="art" src="art/{ART[page]}.svg" alt=""></div>' if page in ART else lead_html + content}</div>
 <footer><span class="src">出處：{src}</span><span class="no">{page} / {len(files)}</span></footer>'''
     slides.append(f'<section class="slide {layout}" data-page="{page}">{inner}</section>')
 
@@ -133,6 +138,13 @@ footer a {{ color:var(--muted); }}
 .cover h1 {{ margin:0; font-size:72px; line-height:1.2; }}
 .cover .lead {{ margin-top:22px; font-size:30px; font-weight:400; color:var(--muted); }}
 .cover .hint {{ margin-top:60px; font-size:18px; color:var(--muted); }}
+div.cover {{ max-width:720px; }}
+div.cover h1 {{ font-size:64px; max-width:7.3em; }}
+div.cover .lead {{ font-size:26px; }}
+.cover-art {{ position:absolute; right:96px; top:110px; width:336px; height:420px; }}
+.with-art {{ display:grid; grid-template-columns:1fr 280px; gap:36px; height:100%; }}
+.with-art .txt {{ min-width:0; }}
+.with-art .art {{ width:100%; max-height:100%; align-self:center; }}
 #nav {{ position:fixed; left:0; right:0; bottom:52px; height:4px; background:rgba(255,255,255,.15); }}
 #ctrl {{ position:fixed; left:0; right:0; bottom:0; height:52px; display:flex; align-items:center; justify-content:center; gap:12px; background:#0f1c2b; font-size:15px; }}
 #ctrl a, #ctrl button {{ font:inherit; color:#e4ecf3; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); border-radius:6px; padding:6px 14px; text-decoration:none; cursor:pointer; }}

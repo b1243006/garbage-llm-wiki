@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="直立的舊床墊和一本行事曆">
+  <!-- 床墊 -->
+  <rect x="40" y="30" width="150" height="270" rx="18" fill="#eef1f5" stroke="#17324d" stroke-width="4"/>
+  <rect x="54" y="44" width="122" height="242" rx="12" fill="none" stroke="#c9d6e2" stroke-width="3" stroke-dasharray="6 6"/>
+  <g fill="#c9d6e2">
+    <circle cx="85" cy="90" r="5"/><circle cx="145" cy="90" r="5"/><circle cx="85" cy="165" r="5"/><circle cx="145" cy="165" r="5"/><circle cx="85" cy="240" r="5"/><circle cx="145" cy="240" r="5"/>
+  </g>
+  <!-- 行事曆 -->
+  <rect x="196" y="150" width="104" height="110" rx="10" fill="#ffffff" stroke="#17324d" stroke-width="4"/>
+  <rect x="196" y="150" width="104" height="28" rx="10" fill="#17324d"/>
+  <rect x="196" y="166" width="104" height="12" fill="#17324d"/>
+  <path d="M220 140 L220 162 M276 140 L276 162" stroke="#17324d" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#c9d6e2">
+    <rect x="210" y="190" width="16" height="14" rx="2"/><rect x="232" y="190" width="16" height="14" rx="2"/><rect x="254" y="190" width="16" height="14" rx="2"/><rect x="276" y="190" width="14" height="14" rx="2"/>
+    <rect x="210" y="212" width="16" height="14" rx="2"/><rect x="254" y="212" width="16" height="14" rx="2"/><rect x="276" y="212" width="14" height="14" rx="2"/>
+    <rect x="210" y="234" width="16" height="14" rx="2"/><rect x="232" y="234" width="16" height="14" rx="2"/>
+  </g>
+  <rect x="230" y="210" width="20" height="18" rx="3" fill="#f2c230" stroke="#17324d" stroke-width="2.5"/>
+  <path d="M234 219 L239 224 L247 213" fill="none" stroke="#17324d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

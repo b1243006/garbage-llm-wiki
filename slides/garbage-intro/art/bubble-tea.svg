@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 400" role="img" aria-label="拆開的珍奶：杯身、封膜、吸管、珍珠">
+  <!-- 封膜：飄在杯子上方 -->
+  <ellipse cx="150" cy="58" rx="78" ry="16" fill="#ffffff" stroke="#17324d" stroke-width="4"/>
+  <ellipse cx="150" cy="58" rx="54" ry="9" fill="none" stroke="#c9d6e2" stroke-width="3"/>
+  <path d="M100 92 L100 108 M150 92 L150 108 M200 92 L200 108" stroke="#5c6b77" stroke-width="3" stroke-dasharray="4 5"/>
+  <!-- 杯身 -->
+  <path d="M78 120 L222 120 L204 330 Q150 344 96 330 Z" fill="#eaf2f8" stroke="#17324d" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M84 184 L216 184 L204 330 Q150 344 96 330 Z" fill="#d9b48a" opacity=".55"/>
+  <ellipse cx="150" cy="120" rx="72" ry="13" fill="#ffffff" stroke="#17324d" stroke-width="4"/>
+  <path d="M104 150 L112 300" stroke="#ffffff" stroke-width="7" stroke-linecap="round" opacity=".8"/>
+  <!-- 吸管：拔出來放在旁邊 -->
+  <g transform="translate(-26 0) rotate(14 278 190)">
+    <rect x="266" y="40" width="22" height="270" rx="5" fill="#f2c230" stroke="#17324d" stroke-width="4"/>
+    <path d="M266 72 L288 72" stroke="#17324d" stroke-width="3"/>
+  </g>
+  <!-- 珍珠：倒出來 -->
+  <g fill="#3b2a20" stroke="#17324d" stroke-width="2">
+    <circle cx="110" cy="372" r="11"/><circle cx="134" cy="378" r="11"/><circle cx="158" cy="372" r="11"/>
+    <circle cx="182" cy="379" r="11"/><circle cx="122" cy="356" r="11"/><circle cx="146" cy="357" r="11"/><circle cx="170" cy="356" r="11"/>
+  </g>
+  <g fill="#ffffff" opacity=".55"><circle cx="106" cy="368" r="3"/><circle cx="130" cy="374" r="3"/><circle cx="154" cy="368" r="3"/><circle cx="178" cy="375" r="3"/><circle cx="118" cy="352" r="3"/><circle cx="142" cy="353" r="3"/><circle cx="166" cy="352" r="3"/></g>
+</svg>
