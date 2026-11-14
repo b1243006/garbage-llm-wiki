@@ -3,6 +3,7 @@
 TAICA「生成式 AI：文字與圖像生成的原理與實務」第十週作業：先建一個 LLM Wiki，再用它當知識庫做一份教學 HTML 簡報。
 
 - 教學簡報：https://b1243006.github.io/garbage-llm-wiki/slides/garbage-intro/deck.html
+- 網站首頁：https://b1243006.github.io/garbage-llm-wiki/（Wiki 和所有紀錄都可以直接在網站上看，用 `wiki.html` 排版）
 - Wiki 目錄：[wiki/index.md](wiki/index.md)（49 頁：來源 18、概念 19、爭議 3、常見誤解 9）
 - 建 Wiki 之前的訪談與需求摘要：[discussion/](discussion/)
 - Wiki 的規則：[AGENTS.md](AGENTS.md)

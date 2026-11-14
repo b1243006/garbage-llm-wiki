@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>垃圾分類 LLM Wiki</title>
+<style>
+  :root { --bg:#f6f5f1; --ink:#1f2933; --muted:#5c6b77; --line:#dde2e5; --navy:#17324d; --truck:#f2c230; --link:#1f5f99; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; line-height:1.75; }
+  header { background:var(--navy); color:#fff; border-bottom:6px solid var(--truck); }
+  header .in { max-width:900px; margin:0 auto; padding:12px 16px; display:flex; gap:8px 18px; align-items:center; flex-wrap:wrap; }
+  header a { color:#e4ecf3; text-decoration:none; font-size:15px; }
+  header a.home { color:#fff; font-weight:700; font-size:18px; margin-right:auto; }
+  header a:hover { text-decoration:underline; }
+  main { max-width:900px; margin:0 auto; padding:24px 16px 60px; }
+  .meta { display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-size:14px; color:var(--muted); margin-bottom:6px; }
+  .badge { background:var(--navy); color:#fff; border-radius:999px; padding:1px 10px; font-size:13px; }
+  .badge.concept { background:#1f6fb2; } .badge.dispute { background:#b8541b; } .badge.myth { background:#b23a48; } .badge.source { background:#5b6470; }
+  article { background:#fff; border:1px solid var(--line); border-radius:12px; padding:20px 26px 26px; }
+  h1 { font-size:28px; line-height:1.35; margin:6px 0 14px; }
+  h2 { font-size:21px; margin:26px 0 8px; padding-bottom:4px; border-bottom:2px solid var(--line); }
+  h3 { font-size:18px; margin:18px 0 6px; }
+  a { color:var(--link); }
+  blockquote { margin:0 0 14px; padding:10px 16px; background:#fff8dc; border-left:6px solid var(--truck); border-radius:0 8px 8px 0; font-size:17px; }
+  ul, ol { padding-left:1.4em; margin:6px 0 12px; }
+  li { margin:4px 0; }
+  a.cite { display:inline-block; margin-left:4px; padding:0 6px; font-size:12px; line-height:19px; border:1px solid var(--line); border-radius:4px; color:var(--muted); text-decoration:none; background:#f7f8f9; vertical-align:1px; }
+  a.cite:hover { border-color:var(--link); color:var(--link); }
+  table { border-collapse:collapse; width:100%; margin:8px 0 14px; font-size:15px; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top; }
+  th { background:#eef1f2; }
+  code { font-family:ui-monospace,Menlo,Consolas,monospace; font-size:.9em; background:#eef1f2; padding:1px 5px; border-radius:4px; }
+  pre { background:#f3f4f5; border:1px solid var(--line); border-radius:8px; padding:12px 14px; overflow-x:auto; font-size:13px; line-height:1.55; }
+  pre code { background:none; padding:0; }
+  .foot { margin-top:16px; font-size:14px; color:var(--muted); }
+  .err { color:#b23a48; }
+</style>
+</head>
+<body>
+<header><div class="in">
+  <a class="home" href="index.html">垃圾分類 LLM Wiki</a>
+  <a href="slides/garbage-intro/deck.html">教學簡報</a>
+  <a href="wiki.html?f=wiki/index.md">Wiki 目錄</a>
+  <a href="wiki.html?f=wiki/log.md">操作紀錄</a>
+  <a href="wiki.html?f=AGENTS.md">規則</a>
+</div></header>
+<main>
+  <div class="meta" id="meta"></div>
+  <article id="doc">讀取中…</article>
+  <p class="foot" id="foot"></p>
+</main>
+<script>
+// 把 repo 裡的 Markdown 檔排成網頁。網址：wiki.html?f=wiki/concepts/drink-cups.md
+// 先讀 GitHub 上的原始檔；讀不到再讀網站上的同一個檔案。
+var RAW = "https://raw.githubusercontent.com/b1243006/garbage-llm-wiki/main/";
+var REPO = "https://github.com/b1243006/garbage-llm-wiki/blob/main/";
+var TYPE = { concept: "概念頁", dispute: "爭議頁", myth: "常見誤解頁", source: "來源頁" };
+
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+function dirOf(p) { return p.indexOf("/") < 0 ? "" : p.slice(0, p.lastIndexOf("/") + 1); }
+function resolve(base, rel) {
+  var parts = (dirOf(base) + rel).split("/"), out = [];
+  parts.forEach(function (x) { if (x === "..") out.pop(); else if (x && x !== ".") out.push(x); });
+  return out.join("/");
+}
+function safe(p) { return /^[\w\-一-鿿.\/]+\.md$/.test(p) && p.indexOf("..") < 0; }
+
+function inline(text, file, refs) {
+  var s = esc(text);
+  s = s.replace(/`([^`]+)`/g, function (_, c) { return "<code>" + c + "</code>"; });
+  s = s.replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+  s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_, t, href) {
+    href = href.replace(/&amp;/g, "&");
+    if (/^https?:/.test(href)) return '<a href="' + esc(href) + '">' + t + "</a>";
+    var target = resolve(file, href.split("#")[0]);
+    if (/\.md$/.test(target)) return '<a href="wiki.html?f=' + encodeURIComponent(target) + '">' + t + "</a>";
+    return '<a href="' + esc(target) + '">' + t + "</a>";
+  });
+  s = s.replace(/\[(doc_\d{2})\](?!\()/g, function (_, d) {
+    var target = refs[d] ? resolve(file, refs[d]) : "wiki/sources/" + d + ".md";
+    return '<a class="cite" href="wiki.html?f=' + encodeURIComponent(target) + '" title="出處 ' + d + '">' + d.slice(4) + "</a>";
+  });
+  s = s.replace(/(^|[\s（(])(https?:\/\/[^\s<）)]+)/g, '$1<a href="$2">$2</a>');
+  return s;
+}
+
+function render(md, file) {
+  var fm = {}, m = md.match(/^---\n([\s\S]*?)\n---\n/);
+  if (m) {
+    m[1].split("\n").forEach(function (l) { var i = l.indexOf(":"); if (i > 0) fm[l.slice(0, i).trim()] = l.slice(i + 1).trim(); });
+    md = md.slice(m[0].length);
+  }
+  var refs = {};
+  md = md.replace(/^\[(doc_\d{2})\]:\s*(\S+)\s*$/gm, function (_, d, href) { refs[d] = href; return ""; });
+  var lines = md.split("\n"), html = [], i = 0;
+  while (i < lines.length) {
+    var l = lines[i];
+    if (/^```/.test(l)) {
+      var code = []; i++;
+      while (i < lines.length && !/^```/.test(lines[i])) code.push(lines[i++]);
+      html.push("<pre><code>" + esc(code.join("\n")) + "</code></pre>"); i++; continue;
+    }
+    var h = l.match(/^(#{1,3})\s+(.*)$/);
+    if (h) { html.push("<h" + h[1].length + ">" + inline(h[2], file, refs) + "</h" + h[1].length + ">"); i++; continue; }
+    if (/^>\s?/.test(l)) {
+      var q = [];
+      while (i < lines.length && /^>\s?/.test(lines[i])) q.push(lines[i++].replace(/^>\s?/, ""));
+      html.push("<blockquote>" + inline(q.join(" "), file, refs) + "</blockquote>"); continue;
+    }
+    if (/^\|/.test(l)) {
+      var rows = [];
+      while (i < lines.length && /^\|/.test(lines[i])) rows.push(lines[i++]);
+      var cells = function (r) { return r.trim().replace(/^\||\|$/g, "").split("|").map(function (c) { return c.trim(); }); };
+      var t = "<table><thead><tr>" + cells(rows[0]).map(function (c) { return "<th>" + inline(c, file, refs) + "</th>"; }).join("") + "</tr></thead><tbody>";
+      rows.slice(2).forEach(function (r) { t += "<tr>" + cells(r).map(function (c) { return "<td>" + inline(c, file, refs) + "</td>"; }).join("") + "</tr>"; });
+      html.push(t + "</tbody></table>"); continue;
+    }
+    if (/^\s*(- |\d+\. )/.test(l)) {
+      var ordered = /^\s*\d+\. /.test(l), items = [];
+      while (i < lines.length && /^\s*(- |\d+\. )/.test(lines[i])) {
+        items.push(lines[i].replace(/^\s*(- \[ \] |- |\d+\. )/, "")); i++;
+        while (i < lines.length && /^\s{2,}\S/.test(lines[i]) && !/^\s*(- |\d+\. )/.test(lines[i])) items[items.length - 1] += " " + lines[i++].trim();
+      }
+      var tag = ordered ? "ol" : "ul";
+      html.push("<" + tag + ">" + items.map(function (x) { return "<li>" + inline(x, file, refs) + "</li>"; }).join("") + "</" + tag + ">"); continue;
+    }
+    if (!l.trim()) { i++; continue; }
+    var p = [];
+    while (i < lines.length && lines[i].trim() && !/^(#|>|\||```|\s*- |\s*\d+\. )/.test(lines[i])) p.push(lines[i++]);
+    html.push("<p>" + inline(p.join(" "), file, refs) + "</p>");
+  }
+  return { fm: fm, html: html.join("\n") };
+}
+
+(async function () {
+  var f = new URLSearchParams(location.search).get("f") || "wiki/index.md";
+  var doc = document.getElementById("doc");
+  if (!safe(f)) { doc.innerHTML = '<p class="err">網址裡的檔案名稱不對。</p>'; return; }
+  var text = null;
+  for (var url of [RAW + f, f]) {
+    try { var r = await fetch(url); if (r.ok) { text = await r.text(); break; } } catch (e) {}
+  }
+  if (text === null) {
+    doc.innerHTML = '<p class="err">讀不到 ' + esc(f) + '。</p><p><a href="' + REPO + esc(f) + '">到 GitHub 看這個檔案</a></p>';
+    return;
+  }
+  var out = render(text, f);
+  doc.innerHTML = out.html;
+  var h1 = doc.querySelector("h1");
+  document.title = (out.fm.title || (h1 && h1.textContent) || f) + "｜垃圾分類 LLM Wiki";
+  var meta = [];
+  if (out.fm.type) meta.push('<span class="badge ' + esc(out.fm.type) + '">' + (TYPE[out.fm.type] || esc(out.fm.type)) + "</span>");
+  if (out.fm.sources) meta.push("出處：" + esc(out.fm.sources.replace(/[\[\]]/g, "")));
+  if (out.fm.updated) meta.push("更新：" + esc(out.fm.updated));
+  document.getElementById("meta").innerHTML = meta.join("　");
+  document.getElementById("foot").innerHTML = "檔案：<code>" + esc(f) + '</code>　<a href="' + REPO + esc(f) + '">在 GitHub 上看原始檔</a>';
+})();
+</script>
+</body>
+</html>

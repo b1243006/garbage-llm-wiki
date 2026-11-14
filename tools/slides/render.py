@@ -5,7 +5,8 @@ import re
 import sys
 from common import ROOT, WIKI, CITE, topic_dir, front, as_list
 
-REPO = "https://github.com/b1243006/garbage-llm-wiki/blob/main"
+# 出處連到網站上的 Wiki 檢視頁（wiki.html），不用跳到 GitHub
+WIKI_VIEW = "../../wiki.html?f=wiki/sources/"
 d = topic_dir()
 esc = html.escape
 titles = {}
@@ -22,7 +23,7 @@ def cite_html(text):
     """把句尾的 [doc_NN] 變成小小的出處標籤，文字本身不動。"""
     docs = CITE.findall(text)
     plain = esc(CITE.sub("", text).strip())
-    tags = "".join(f'<a class="c" href="{REPO}/wiki/sources/{x}.md" title="{esc(titles.get(x, x))}">{x[4:]}</a>' for x in docs)
+    tags = "".join(f'<a class="c" href="{WIKI_VIEW}{x}.md" title="{esc(titles.get(x, x))}">{x[4:]}</a>' for x in docs)
     return plain, tags, docs
 
 
@@ -80,7 +81,7 @@ for f in files:
             content = f'<div class="quiz"><ol class="q">{"".join(f"<li>{esc(x)}</li>" for x in q)}</ol><button class="reveal">看答案</button><div class="ans" hidden>{li(a, True)}</div></div>'
         else:
             content = "".join((f"<h3>{esc(h)}</h3>" if h else "") + li(items, layout == "steps") for h, items in sections)
-        src = "、".join(f'<a href="{REPO}/wiki/sources/{x}.md">{x} {esc(titles.get(x, ""))}</a>' for x in docs)
+        src = "、".join(f'<a href="{WIKI_VIEW}{x}.md">{x} {esc(titles.get(x, ""))}</a>' for x in docs)
         inner = f'''<header><div class="goal">這頁要學會：{esc(goals.get(page, ""))}</div><h2>{esc(title)}</h2></header>
 <div class="body {layout}">{lead_html}{content}</div>
 <footer><span class="src">出處：{src}</span><span class="no">{page} / {len(files)}</span></footer>'''

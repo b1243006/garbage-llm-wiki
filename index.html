@@ -9,19 +9,27 @@
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--ink); font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; line-height:1.7; }
   header { background:var(--navy); color:#fff; border-bottom:6px solid var(--truck); padding:22px 16px; }
-  header div, main { max-width:860px; margin:0 auto; }
+  header div, main { max-width:900px; margin:0 auto; }
   h1 { margin:0; font-size:26px; }
   header p { margin:4px 0 0; color:#c9d6e2; }
-  main { padding:28px 16px 48px; }
-  h2 { font-size:20px; margin:30px 0 10px; }
+  main { padding:26px 16px 50px; }
+  h2 { font-size:20px; margin:34px 0 10px; }
   a { color:var(--link); }
-  .big { display:block; background:#fff; border:1px solid var(--line); border-left:8px solid var(--truck); border-radius:10px; padding:16px 20px; text-decoration:none; color:inherit; }
-  .big b { font-size:20px; color:var(--navy); }
-  .big span { display:block; color:var(--muted); }
-  ul { padding-left:1.2em; margin:0; }
-  li { margin:6px 0; }
+  .deck { display:grid; grid-template-columns:1.2fr 1fr; gap:22px; align-items:center; background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px; text-decoration:none; color:inherit; }
+  .deck:hover { border-color:var(--navy); }
+  .deck img { width:100%; border:1px solid var(--line); border-radius:8px; display:block; }
+  .deck b { font-size:22px; color:var(--navy); display:block; }
+  .deck p { margin:8px 0 14px; color:var(--muted); }
+  .btn { display:inline-block; background:var(--navy); color:#fff; font-weight:700; padding:10px 22px; border-radius:8px; }
+  .cards { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; }
+  .card { display:block; background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 14px; text-decoration:none; color:inherit; }
+  .card:hover { border-color:var(--navy); }
+  .card b { display:block; color:var(--navy); }
+  .card span { font-size:14px; color:var(--muted); }
+  ol.flow { background:#fff; border:1px solid var(--line); border-radius:10px; padding:14px 20px 14px 40px; margin:0 0 12px; }
+  img.graph { width:100%; background:#fff; border:1px solid var(--line); border-radius:10px; }
   .muted { color:var(--muted); font-size:14px; }
-  ol.flow { background:#fff; border:1px solid var(--line); border-radius:10px; padding:14px 20px 14px 40px; margin:0; }
+  @media (max-width:700px) { .deck, .cards { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -30,19 +38,30 @@
   <p>先建 Wiki，再只用 Wiki 的內容做一份教學簡報</p>
 </div></header>
 <main>
-  <a class="big" href="slides/garbage-intro/deck.html">
-    <b>教學簡報：垃圾分類入門</b>
-    <span>15 頁，給完全不熟的大學生。用 → 鍵或點畫面右側換頁。</span>
+  <a class="deck" href="slides/garbage-intro/deck.html">
+    <img src="slides/garbage-intro/shots/01.png" alt="簡報封面">
+    <div>
+      <b>教學簡報：垃圾分類入門</b>
+      <p>15 頁，給完全不熟的大學生。按 → 鍵或點畫面右側換頁，手機可以左右滑。每一條內容後面的小數字是出處，點下去會打開 Wiki 的來源頁。</p>
+      <span class="btn">開始看簡報 →</span>
+    </div>
   </a>
 
-  <h2>Wiki</h2>
-  <ul>
-    <li><a href="https://github.com/b1243006/garbage-llm-wiki/blob/main/wiki/index.md">Wiki 目錄</a>：49 頁（來源 18、概念 19、爭議 3、常見誤解 9），每條重點都標了來源編號</li>
-    <li><a href="https://github.com/b1243006/garbage-llm-wiki/tree/main/discussion">建 Wiki 之前的訪談紀錄與需求摘要</a>（先討論、後生成）</li>
-    <li><a href="https://github.com/b1243006/garbage-llm-wiki/blob/main/AGENTS.md">AGENTS.md</a>：Wiki 的規則</li>
-    <li><a href="https://github.com/b1243006/garbage-llm-wiki/blob/main/wiki/log.md">wiki/log.md</a>：每次讀入資料和檢查的紀錄</li>
-    <li><a href="https://github.com/b1243006/garbage-llm-wiki/blob/main/reviews/wiki-review-1.md">獨立 AI 對 Wiki 的審查結果</a></li>
-  </ul>
+  <h2>Wiki（49 頁，直接在這個網站上看）</h2>
+  <div class="cards">
+    <a class="card" href="wiki.html?f=wiki/index.md"><b>Wiki 目錄</b><span>概念 19、爭議 3、常見誤解 9、來源 18</span></a>
+    <a class="card" href="wiki.html?f=wiki/concepts/overview.md"><b>範例：總覽</b><span>垃圾大致分成四類</span></a>
+    <a class="card" href="wiki.html?f=wiki/disputes/eggshell.md"><b>範例：爭議頁</b><span>蛋殼算不算廚餘</span></a>
+    <a class="card" href="wiki.html?f=wiki/log.md"><b>Wiki 操作紀錄</b><span>每次讀入資料、檢查、修正</span></a>
+    <a class="card" href="wiki.html?f=AGENTS.md"><b>AGENTS.md</b><span>Wiki 的規則</span></a>
+    <a class="card" href="wiki.html?f=reviews/wiki-review-1.md"><b>獨立 AI 審查 Wiki</b><span>對照原始資料找出 26 個問題</span></a>
+  </div>
+
+  <h2>建 Wiki 之前：先討論、後生成</h2>
+  <div class="cards">
+    <a class="card" href="wiki.html?f=discussion/01_interview.md"><b>訪談紀錄</b><span>AI 問我的 11 題和我的回答</span></a>
+    <a class="card" href="wiki.html?f=discussion/02_requirements.md"><b>需求摘要</b><span>我確認之後才建檔</span></a>
+  </div>
 
   <h2>做簡報的流程（Graph）</h2>
   <ol class="flow">
@@ -52,14 +71,18 @@
     <li>逐頁稿 → 逐頁稿關卡（程式）→ 忠實度審查（獨立 AI）</li>
     <li>渲染 HTML（程式）→ 渲染關卡（程式）→ 交件</li>
   </ol>
-  <p><img src="slides/garbage-intro/graph.png" alt="做簡報的 Graph 流程圖" style="width:100%;background:#fff;border:1px solid var(--line);border-radius:10px"></p>
-  <ul style="margin-top:12px">
-    <li><a href="https://github.com/b1243006/garbage-llm-wiki/blob/main/.agents/workflows/topic-slides.md">流程定義與修改紀錄</a>（v1 → v2）</li>
-    <li><a href="https://github.com/b1243006/garbage-llm-wiki/blob/main/slides/garbage-intro/run-log.md">這次的執行紀錄</a>、<a href="https://github.com/b1243006/garbage-llm-wiki/blob/main/slides/garbage-intro/report.md">交件報告</a></li>
-    <li><a href="https://github.com/b1243006/garbage-llm-wiki/tree/main/slides/garbage-intro">每一關的產出檔案</a>：sources.md、cards/、outline.md、drafts/、review-*.md、shots/</li>
-  </ul>
+  <img class="graph" src="slides/garbage-intro/graph.png" alt="做簡報的 Graph 流程圖">
+  <div class="cards" style="margin-top:12px">
+    <a class="card" href="wiki.html?f=.agents/workflows/topic-slides.md"><b>流程定義</b><span>每一關做什麼、v1 → v2 修改紀錄</span></a>
+    <a class="card" href="wiki.html?f=slides/garbage-intro/run-log.md"><b>執行紀錄</b><span>每一關的時間、結果、問題清單</span></a>
+    <a class="card" href="wiki.html?f=slides/garbage-intro/report.md"><b>交件報告</b><span>每一關跑了幾次、沒過幾次</span></a>
+    <a class="card" href="wiki.html?f=slides/garbage-intro/outline.md"><b>大綱</b><span>我確認過的 15 頁大綱</span></a>
+    <a class="card" href="wiki.html?f=slides/garbage-intro/review-1.md"><b>忠實度審查第 1 輪</b><span>16 個問題</span></a>
+    <a class="card" href="wiki.html?f=slides/garbage-intro/review-2.md"><b>忠實度審查第 2 輪</b><span>2 個問題</span></a>
+  </div>
 
-  <p class="muted" style="margin-top:32px">TAICA「生成式 AI：文字與圖像生成的原理與實務」第十週作業。資料是第七週整理的 18 篇公開資料摘要，實際規定以所在地清潔隊公告為準。<a href="https://github.com/b1243006/garbage-llm-wiki">GitHub</a></p>
+  <p class="muted" style="margin-top:36px">TAICA「生成式 AI：文字與圖像生成的原理與實務」第十週作業。資料是第七週整理的 18 篇公開資料摘要，實際規定以所在地清潔隊公告為準。
+  原始碼與每一步的 commit：<a href="https://github.com/b1243006/garbage-llm-wiki">GitHub</a></p>
 </main>
 </body>
 </html>
