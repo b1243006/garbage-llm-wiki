@@ -64,7 +64,7 @@ for f in files:
     lead_plain, lead_tags, _ = cite_html(lead) if lead else ("", "", [])
     lead_html = f'<p class="lead"><span>{lead_plain}</span>{lead_tags}</p>' if lead else ""
     if layout == "cover":
-        inner = f'<div class="cover"><div class="stripe"></div><h1>{esc(title)}</h1>{lead_html}<p class="hint">按 → 或點畫面右側開始</p></div>'
+        inner = f'<div class="cover"><div class="stripe"></div><h1>{esc(title)}</h1>{lead_html}<p class="hint">用下方的「下一頁」、鍵盤 → 鍵，或點畫面右側開始；手機可以左右滑</p></div>'
     else:
         if layout == "table":
             rows = []
@@ -98,7 +98,7 @@ doc = f'''<!doctype html>
 :root {{ --bg:#f6f5f1; --ink:#1f2933; --muted:#5c6b77; --line:#dde2e5; --navy:#17324d; --truck:#f2c230; --link:#1f5f99; }}
 * {{ box-sizing:border-box; }}
 html, body {{ margin:0; height:100%; background:#0f1c2b; overflow:hidden; font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; color:var(--ink); }}
-#stage {{ position:absolute; left:50%; top:50%; width:1280px; height:720px; transform-origin:0 0; background:var(--bg); }}
+#stage {{ position:absolute; left:50%; top:calc(50% - 26px); width:1280px; height:720px; transform-origin:0 0; background:var(--bg); }}
 .slide {{ position:absolute; inset:0; display:none; flex-direction:column; padding:44px 64px 30px; border-top:10px solid var(--navy); }}
 .slide.on {{ display:flex; }}
 header {{ flex:none; margin-bottom:18px; }}
@@ -133,9 +133,19 @@ footer a {{ color:var(--muted); }}
 .cover h1 {{ margin:0; font-size:72px; line-height:1.2; }}
 .cover .lead {{ margin-top:22px; font-size:30px; font-weight:400; color:var(--muted); }}
 .cover .hint {{ margin-top:60px; font-size:18px; color:var(--muted); }}
-#nav {{ position:fixed; left:0; right:0; bottom:0; height:4px; background:rgba(255,255,255,.15); }}
+#nav {{ position:fixed; left:0; right:0; bottom:52px; height:4px; background:rgba(255,255,255,.15); }}
+#ctrl {{ position:fixed; left:0; right:0; bottom:0; height:52px; display:flex; align-items:center; justify-content:center; gap:12px; background:#0f1c2b; font-size:15px; }}
+#ctrl a, #ctrl button {{ font:inherit; color:#e4ecf3; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); border-radius:6px; padding:6px 14px; text-decoration:none; cursor:pointer; }}
+#ctrl a:hover, #ctrl button:hover {{ background:rgba(255,255,255,.18); }}
+#ctrl button:disabled {{ opacity:.35; cursor:default; }}
+#ctrl .home {{ position:absolute; left:14px; }}
+#ctrl #pg {{ color:#c9d6e2; min-width:64px; text-align:center; }}
+@media (max-width:600px) {{ #ctrl .home {{ position:static; }} #ctrl {{ gap:8px; font-size:14px; }} }}
+#rotate {{ display:none; }}
+@media (max-width:700px) and (orientation:portrait) {{ #rotate {{ display:block; position:fixed; left:0; right:0; top:16px; text-align:center; color:#c9d6e2; font-size:15px; }} }}
+@media print {{ #rotate {{ display:none !important; }} }}
 #bar {{ height:100%; width:0; background:var(--truck); transition:width .2s; }}
-@media print {{ html, body {{ overflow:visible; height:auto; background:#fff; }} #stage {{ position:static; transform:none !important; width:auto; height:auto; }} .slide {{ display:flex !important; position:relative; width:1280px; height:720px; page-break-after:always; }} #nav {{ display:none; }} .ans {{ display:block !important; }} }}
+@media print {{ html, body {{ overflow:visible; height:auto; background:#fff; }} #stage {{ position:static; transform:none !important; width:auto; height:auto; }} .slide {{ display:flex !important; position:relative; width:1280px; height:720px; page-break-after:always; }} #nav, #ctrl {{ display:none; }} .ans {{ display:block !important; }} }}
 </style>
 </head>
 <body>
@@ -143,11 +153,13 @@ footer a {{ color:var(--muted); }}
 {chr(10).join(slides)}
 </div>
 <div id="nav"><div id="bar"></div></div>
+<div id="rotate">把手機橫過來看，字會比較大</div>
+<div id="ctrl"><a class="home" href="../../index.html">← 回首頁</a><button id="prev" type="button">‹ 上一頁</button><span id="pg"></span><button id="next" type="button">下一頁 ›</button></div>
 <script>
 (function () {{
   var slides = [].slice.call(document.querySelectorAll(".slide")), cur = 0, stage = document.getElementById("stage");
   function fit() {{
-    var s = Math.min(innerWidth / 1280, innerHeight / 720);
+    var s = Math.min(innerWidth / 1280, (innerHeight - 52) / 720);
     stage.style.transform = "scale(" + s + ") translate(-50%, -50%)";
   }}
   function go(i) {{
@@ -155,8 +167,13 @@ footer a {{ color:var(--muted); }}
     slides.forEach(function (el, k) {{ el.classList.toggle("on", k === cur); }});
     document.getElementById("bar").style.width = ((cur + 1) / slides.length * 100) + "%";
     history.replaceState(null, "", "#" + (cur + 1));
+    document.getElementById("pg").textContent = (cur + 1) + " / " + slides.length;
+    document.getElementById("prev").disabled = cur === 0;
+    document.getElementById("next").disabled = cur === slides.length - 1;
   }}
   addEventListener("resize", fit);
+  document.getElementById("prev").addEventListener("click", function () {{ go(cur - 1); }});
+  document.getElementById("next").addEventListener("click", function () {{ go(cur + 1); }});
   addEventListener("keydown", function (e) {{
     if (["ArrowRight", "PageDown", " ", "Enter"].indexOf(e.key) >= 0) go(cur + 1);
     if (["ArrowLeft", "PageUp", "Backspace"].indexOf(e.key) >= 0) go(cur - 1);

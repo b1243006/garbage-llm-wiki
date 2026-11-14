@@ -35,6 +35,11 @@
   pre code { background:none; padding:0; }
   .foot { margin-top:16px; font-size:14px; color:var(--muted); }
   .err { color:#b23a48; }
+  .bar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
+  .back { font:inherit; font-size:14px; color:var(--navy); background:#fff; border:1px solid var(--line); border-radius:6px; padding:4px 12px; cursor:pointer; }
+  .back:hover { border-color:var(--navy); }
+  .crumb { font-size:14px; color:var(--muted); }
+  .crumb a { color:var(--muted); }
 </style>
 </head>
 <body>
@@ -42,10 +47,10 @@
   <a class="home" href="index.html">垃圾分類 LLM Wiki</a>
   <a href="slides/garbage-intro/deck.html">教學簡報</a>
   <a href="wiki.html?f=wiki/index.md">Wiki 目錄</a>
-  <a href="wiki.html?f=wiki/log.md">操作紀錄</a>
-  <a href="wiki.html?f=AGENTS.md">規則</a>
+  <a href="index.html#process">製作過程</a>
 </div></header>
 <main>
+  <div class="bar"><button class="back" id="back" type="button">← 上一頁</button><span class="crumb" id="crumb"></span></div>
   <div class="meta" id="meta"></div>
   <article id="doc">讀取中…</article>
   <p class="foot" id="foot"></p>
@@ -133,8 +138,24 @@ function render(md, file) {
   return { fm: fm, html: html.join("\n") };
 }
 
+// 上一頁：從本站點進來就回上一頁，否則回首頁
+document.getElementById("back").addEventListener("click", function () {
+  if (document.referrer && document.referrer.indexOf(location.origin) === 0 && history.length > 1) history.back();
+  else location.href = "index.html";
+});
+
 (async function () {
   var f = new URLSearchParams(location.search).get("f") || "wiki/index.md";
+  var KIND = { concepts: "概念頁", disputes: "爭議頁", myths: "常見誤解頁", sources: "來源頁" };
+  var crumb = ['<a href="index.html">首頁</a>'];
+  if (f.indexOf("wiki/") === 0) {
+    crumb.push('<a href="wiki.html?f=wiki/index.md">Wiki 目錄</a>');
+    var k = f.split("/")[1];
+    if (KIND[k]) crumb.push(KIND[k]);
+  } else {
+    crumb.push('<a href="index.html#process">製作過程</a>');
+  }
+  document.getElementById("crumb").innerHTML = crumb.join(" ／ ");
   var doc = document.getElementById("doc");
   if (!safe(f)) { doc.innerHTML = '<p class="err">網址裡的檔案名稱不對。</p>'; return; }
   var text = null;
